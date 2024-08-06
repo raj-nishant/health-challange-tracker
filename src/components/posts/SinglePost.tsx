@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button } from "antd";
+import { Card, Button, Badge } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -7,10 +7,22 @@ import {
 } from "@ant-design/icons";
 
 const SinglePost = ({ post, onEdit, onDelete }) => {
+  const statusColor =
+    post.status === "DONE"
+      ? "green"
+      : post.status === "IN PROGRESS"
+      ? "yellow"
+      : "red";
   return (
     <Card
-      className="shadow-lg mb-4"
+      className="shadow-lg border mb-4"
       bordered={false}
+      title={
+        <div className="flex justify-between items-center">
+          <span>{post.title}</span>
+          <Badge color={statusColor} text={post.status} />
+        </div>
+      }
       extra={
         <div className="flex space-x-2">
           <Button type="text" icon={<EditOutlined />} onClick={onEdit} />

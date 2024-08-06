@@ -42,7 +42,7 @@ const Dashboard: React.FC = () => {
       }));
       setPosts(transformedPosts);
     }
-  }, []);
+  }, [showAddPostModal]);
 
   // Filter posts by status
   useEffect(() => {
