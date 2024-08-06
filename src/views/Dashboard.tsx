@@ -31,22 +31,27 @@ const Dashboard: React.FC = () => {
   // Fetch posts from local storage
   useEffect(() => {
     const savedPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-    setPosts(Array.isArray(savedPosts) ? savedPosts : []);
+    if (Array.isArray(savedPosts)) {
+      const transformedPosts = savedPosts.map((post) => ({
+        id: post.id,
+        status: post.status || "TO DO",
+        title: post.title,
+        description: post.description,
+        url: post.url,
+        deadline: post.endDate || post.deadline,
+      }));
+      setPosts(transformedPosts);
+    }
   }, []);
 
   // Filter posts by status
   useEffect(() => {
-    if (posts) {
+    if (posts.length > 0) {
       setToDoPosts(posts.filter((post) => post.status === "TO DO"));
       setInProgressPosts(posts.filter((post) => post.status === "IN PROGRESS"));
       setDonePosts(posts.filter((post) => post.status === "DONE"));
     }
   }, [posts]);
-
-  // Close deadline notification
-  const closeDeadlineNotify = () => {
-    setDeadlineNotiOpen(false);
-  };
 
   // Calculate the earliest deadline
   const getEarliestDeadline = useCallback(() => {
@@ -105,6 +110,12 @@ const Dashboard: React.FC = () => {
     });
   };
 
+  // Handle editing a post
+  const handleEditPost = (post: Post) => {
+    setCurrentPost(post);
+    setShowUpdatePostModal(true);
+  };
+
   return (
     <div className="p-4">
       {posts.length > 0 && earliestDeadline && (
@@ -123,7 +134,7 @@ const Dashboard: React.FC = () => {
               which is the earliest deadline.
             </p>
           </div>
-          <Button type="primary" onClick={closeDeadlineNotify}>
+          <Button type="primary" onClick={() => setDeadlineNotiOpen(false)}>
             Close
           </Button>
         </div>
@@ -136,10 +147,7 @@ const Dashboard: React.FC = () => {
               <SinglePost
                 key={post.id}
                 post={post}
-                onEdit={() => {
-                  setCurrentPost(post);
-                  setShowUpdatePostModal(true);
-                }}
+                onEdit={() => handleEditPost(post)}
                 onDelete={() => handleDeletePost(post.id)}
               />
             ))}
@@ -152,10 +160,7 @@ const Dashboard: React.FC = () => {
               <SinglePost
                 key={post.id}
                 post={post}
-                onEdit={() => {
-                  setCurrentPost(post);
-                  setShowUpdatePostModal(true);
-                }}
+                onEdit={() => handleEditPost(post)}
                 onDelete={() => handleDeletePost(post.id)}
               />
             ))}
@@ -168,22 +173,21 @@ const Dashboard: React.FC = () => {
               <SinglePost
                 key={post.id}
                 post={post}
-                onEdit={() => {
-                  setCurrentPost(post);
-                  setShowUpdatePostModal(true);
-                }}
+                onEdit={() => handleEditPost(post)}
                 onDelete={() => handleDeletePost(post.id)}
               />
             ))}
           </div>
         </div>
       </div>
-      <button
-        className="fixed bottom-8 right-8 bg-green-500 text-white p-4 rounded-full hover:bg-green-600"
+      <Button
+        type="primary"
+        icon={<img src={addIcon} alt="Add" />}
+        className="fixed bottom-4 right-4 rounded-full"
         onClick={() => setShowAddPostModal(true)}
       >
-        <img src={addIcon} alt="Add Post" className="w-8 h-8" />
-      </button>
+        Add Post
+      </Button>
       <AddPostModal
         visible={showAddPostModal}
         onClose={() => setShowAddPostModal(false)}
@@ -192,8 +196,8 @@ const Dashboard: React.FC = () => {
       {currentPost && (
         <UpdatePostModal
           visible={showUpdatePostModal}
-          post={currentPost}
           onClose={() => setShowUpdatePostModal(false)}
+          post={currentPost}
           onUpdatePost={handleUpdatePost}
         />
       )}

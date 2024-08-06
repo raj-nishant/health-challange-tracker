@@ -1,56 +1,36 @@
 import React from "react";
-import { Card, Badge, Button } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Card, Button } from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  PlayCircleOutlined,
+} from "@ant-design/icons";
 
-interface Post {
-  id: string;
-  status: string;
-  title: string;
-  description: string;
-  url: string;
-  deadline: string;
-}
-
-interface SinglePostProps {
-  post: Post;
-  onEdit: () => void;
-  onDelete: () => void;
-}
-
-const SinglePost: React.FC<SinglePostProps> = ({ post, onEdit, onDelete }) => {
-  const statusColor =
-    post.status === "DONE"
-      ? "green"
-      : post.status === "IN PROGRESS"
-      ? "yellow"
-      : "red";
-
+const SinglePost = ({ post, onEdit, onDelete }) => {
   return (
     <Card
-      className="mb-4 shadow-md"
-      title={
-        <div className="flex justify-between items-center">
-          <span className="text-lg font-semibold">{post.title}</span>
-          <Badge color={statusColor} text={post.status} />
-        </div>
-      }
+      className="shadow-lg mb-4"
+      bordered={false}
       extra={
-        <div className="flex items-center space-x-2">
-          <Button type="primary" icon={<EditOutlined />} onClick={onEdit} />
-          <Button type="default" icon={<DeleteOutlined />} onClick={onDelete} />
+        <div className="flex space-x-2">
+          <Button type="text" icon={<EditOutlined />} onClick={onEdit} />
+          <Button type="text" icon={<DeleteOutlined />} onClick={onDelete} />
         </div>
       }
     >
-      <p className="mb-2">{post.description}</p>
+      <h4 className="font-semibold text-xl">{post.title}</h4>
+      <p className="text-gray-700 mb-2">{post.description}</p>
       {post.url && (
-        <a
+        <Button
+          type="link"
           href={post.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 underline"
+          icon={<PlayCircleOutlined />}
+          className="text-blue-500"
         >
           View Tutorial
-        </a>
+        </Button>
       )}
       <p className="mt-2 text-gray-600">Deadline: {post.deadline}</p>
     </Card>

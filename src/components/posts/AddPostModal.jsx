@@ -11,9 +11,10 @@ const AddPostModal = ({ visible, onClose, onAddPost }) => {
     startDate: "",
     endDate: "",
     frequency: "daily",
+    url: "", // Added URL field
   });
 
-  const { title, description, startDate, endDate, frequency } = newPost;
+  const { title, description, startDate, endDate, frequency, url } = newPost;
 
   const onChangeNewPostForm = (event) => {
     setNewPost({ ...newPost, [event.target.name]: event.target.value });
@@ -44,6 +45,7 @@ const AddPostModal = ({ visible, onClose, onAddPost }) => {
       startDate: "",
       endDate: "",
       frequency: "daily",
+      url: "", // Reset URL field
     });
     onClose();
   };
@@ -101,6 +103,15 @@ const AddPostModal = ({ visible, onClose, onAddPost }) => {
             <Select.Option value="daily">Daily</Select.Option>
             <Select.Option value="weekly">Weekly</Select.Option>
           </Select>
+        </Form.Item>
+        <Form.Item label="Tutorial URL">
+          <Input
+            type="text"
+            placeholder="Tutorial URL"
+            name="url"
+            value={url}
+            onChange={onChangeNewPostForm}
+          />
         </Form.Item>
       </Form>
     </Modal>
