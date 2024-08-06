@@ -27,7 +27,7 @@ const LoginForm: React.FC = () => {
   return (
     <div className="flex justify-center items-center ">
       <Form
-        className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md"
+        className="w-full max-w-sm p-8 rounded-lg shadow-md"
         onFinish={login}
       >
         <Form.Item

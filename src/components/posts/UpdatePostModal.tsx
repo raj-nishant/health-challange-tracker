@@ -1,67 +1,75 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { PostContext } from '../../contexts/PostContext';
-import { Modal, Button, Form, Input, Select, DatePicker, message } from 'antd';
-import moment from 'moment';
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Form, Input, Select, DatePicker, message } from "antd";
+import moment from "moment";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const UpdatePostModal = () => {
-  const {
-    postState: { post },
-    showUpdatePostModal,
-    setShowUpdatePostModal,
-    updatePost,
-    setShowToast,
-  } = useContext(PostContext);
+interface Post {
+  id: string;
+  status: string;
+  title: string;
+  description: string;
+  url: string;
+  deadline: string;
+}
 
-  const [updatedPost, setUpdatedPost] = useState(post);
+interface UpdatePostModalProps {
+  visible: boolean;
+  post: Post;
+  onClose: () => void;
+  onUpdatePost: (updatedPost: Post) => void;
+}
 
-  useEffect(() => setUpdatedPost(post), [post]);
+const UpdatePostModal: React.FC<UpdatePostModalProps> = ({
+  visible,
+  post,
+  onClose,
+  onUpdatePost,
+}) => {
+  const [updatedPost, setUpdatedPost] = useState<Post>(post);
 
-  const { title, description, url, status, deadline } = updatedPost;
+  useEffect(() => {
+    setUpdatedPost(post);
+  }, [post]);
 
-  const onChangeUpdatedPostForm = (event) => {
+  const onChangeUpdatedPostForm = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setUpdatedPost({ ...updatedPost, [event.target.name]: event.target.value });
   };
 
-  const onChangeDate = (date, dateString) => {
+  const onChangeDate = (date: moment.Moment | null, dateString: string) => {
     setUpdatedPost({ ...updatedPost, deadline: dateString });
   };
 
-  const closeDialog = () => {
-    setUpdatedPost(post);
-    setShowUpdatePostModal(false);
-  };
-
-  const onSubmit = () => {
-    updatePost(updatedPost);
-    setShowUpdatePostModal(false);
-    setShowToast({ show: true, message: 'The post has been successfully updated!', type: 'success' });
-    message.success('The post has been successfully updated!');
+  const handleSubmit = () => {
+    onUpdatePost(updatedPost);
+    onClose();
+    message.success("The post has been successfully updated!");
   };
 
   return (
     <Modal
       title="Update Task"
-      visible={showUpdatePostModal}
-      onCancel={closeDialog}
+      visible={visible}
+      onCancel={onClose}
       footer={[
-        <Button key="cancel" onClick={closeDialog}>
+        <Button key="cancel" onClick={onClose}>
           Cancel
         </Button>,
-        <Button key="submit" type="primary" onClick={onSubmit}>
+        <Button key="submit" type="primary" onClick={handleSubmit}>
           Submit
         </Button>,
       ]}
     >
-      <Form layout="vertical" onFinish={onSubmit}>
+      <Form layout="vertical">
         <Form.Item label="Title" required>
           <Input
             type="text"
             placeholder="Title"
             name="title"
-            value={title}
+            value={updatedPost.title}
             onChange={onChangeUpdatedPostForm}
             required
           />
@@ -71,7 +79,7 @@ const UpdatePostModal = () => {
             rows={3}
             placeholder="Description"
             name="description"
-            value={description}
+            value={updatedPost.description}
             onChange={onChangeUpdatedPostForm}
           />
         </Form.Item>
@@ -80,15 +88,16 @@ const UpdatePostModal = () => {
             type="text"
             placeholder="Tutorial URL"
             name="url"
-            value={url}
+            value={updatedPost.url}
             onChange={onChangeUpdatedPostForm}
           />
         </Form.Item>
         <Form.Item label="Status">
           <Select
-            value={status}
-            name="status"
-            onChange={(value) => setUpdatedPost({ ...updatedPost, status: value })}
+            value={updatedPost.status}
+            onChange={(value) =>
+              setUpdatedPost({ ...updatedPost, status: value })
+            }
           >
             <Option value="TO DO">TO DO</Option>
             <Option value="IN PROGRESS">IN PROGRESS</Option>
@@ -98,7 +107,7 @@ const UpdatePostModal = () => {
         <Form.Item label="Deadline Day">
           <DatePicker
             format="YYYY-MM-DD"
-            value={deadline ? moment(deadline) : null}
+            value={updatedPost.deadline ? moment(updatedPost.deadline) : null}
             onChange={onChangeDate}
           />
         </Form.Item>

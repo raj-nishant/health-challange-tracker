@@ -1,33 +1,34 @@
-import Button from 'react-bootstrap/Button'
-import playIcon from '../../assets/play-btn.svg'
-import editIcon from '../../assets/pencil.svg'
-import deleteIcon from '../../assets/trash.svg'
-import { PostContext } from '../../contexts/PostContext'
-import { useContext } from 'react'
+import React, { useContext } from "react";
+import { Button, Tooltip } from "antd";
+import {
+  PlayCircleOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { PostContext } from "../../contexts/PostContext";
 
 const ActionButtons = ({ url, id }) => {
-	const { deletePost, findPost, setShowUpdatePostModal } = useContext(
-		PostContext
-	)
+  const { deletePost, findPost, setShowUpdatePostModal } =
+    useContext(PostContext);
 
-	const choosePost = postId => {
-		findPost(postId)
-		setShowUpdatePostModal(true)
-	}
+  const choosePost = (postId) => {
+    findPost(postId);
+    setShowUpdatePostModal(true);
+  };
 
-	return (
-		<>
-			<Button className='post-button' href={url} target='_blank'>
-				<img src={playIcon} alt='play' width='28' height='28' />
-			</Button>
-			<Button className='post-button' onClick={choosePost.bind(this, id)}>
-				<img src={editIcon} alt='edit' width='20' height='20' />
-			</Button>
-			<Button className='post-button' onClick={deletePost.bind(this, id)}>
-				<img src={deleteIcon} alt='delete' width='20' height='20' />
-			</Button>
-		</>
-	)
-}
+  return (
+    <div className="flex space-x-2">
+      <Tooltip title="View">
+        <Button href={url} target="_blank" icon={<PlayCircleOutlined />} />
+      </Tooltip>
+      <Tooltip title="Edit">
+        <Button onClick={() => choosePost(id)} icon={<EditOutlined />} />
+      </Tooltip>
+      <Tooltip title="Delete">
+        <Button onClick={() => deletePost(id)} icon={<DeleteOutlined />} />
+      </Tooltip>
+    </div>
+  );
+};
 
-export default ActionButtons
+export default ActionButtons;

@@ -1,59 +1,60 @@
-import React, { useContext, useState } from 'react';
-import { PostContext } from '../../contexts/PostContext';
-import { v4 as uuidv4 } from 'uuid';
-import { Modal, Button, Form, Input, DatePicker, message } from 'antd';
-import moment from 'moment';
+import React, { useState } from "react";
+import { Modal, Button, Form, Input, DatePicker, Select } from "antd";
+import { v4 as uuidv4 } from "uuid";
+import moment from "moment";
 
-const AddPostModal = () => {
-  const {
-    showAddPostModal,
-    setShowAddPostModal,
-    addPost,
-    setShowToast
-  } = useContext(PostContext);
-
+const AddPostModal = ({ visible, onClose, onAddPost }) => {
   const [newPost, setNewPost] = useState({
     id: uuidv4(),
-    title: '',
-    description: '',
-    url: '',
-    status: 'TO DO',
-    deadline: '',
+    title: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+    frequency: "daily",
   });
 
-  const { title, description, url, deadline } = newPost;
+  const { title, description, startDate, endDate, frequency } = newPost;
 
   const onChangeNewPostForm = (event) => {
     setNewPost({ ...newPost, [event.target.name]: event.target.value });
   };
 
-  const onChangeDate = (date, dateString) => {
-    setNewPost({ ...newPost, deadline: dateString });
+  const onChangeStartDate = (date, dateString) => {
+    setNewPost({ ...newPost, startDate: dateString });
   };
 
-  const closeDialog = () => {
-    resetAddPostData();
+  const onChangeEndDate = (date, dateString) => {
+    setNewPost({ ...newPost, endDate: dateString });
+  };
+
+  const onChangeFrequency = (value) => {
+    setNewPost({ ...newPost, frequency: value });
   };
 
   const onSubmit = () => {
-    addPost(newPost);
+    onAddPost(newPost);
     resetAddPostData();
-    setShowToast({ show: true, message: 'Create new post successfully!', type: 'success' });
-    message.success('Create new post successfully!');
   };
 
   const resetAddPostData = () => {
-    setNewPost({ id: uuidv4(), title: '', description: '', url: '', status: 'TO DO', deadline: '' });
-    setShowAddPostModal(false);
+    setNewPost({
+      id: uuidv4(),
+      title: "",
+      description: "",
+      startDate: "",
+      endDate: "",
+      frequency: "daily",
+    });
+    onClose();
   };
 
   return (
     <Modal
-      title="Create new task!"
-      visible={showAddPostModal}
-      onCancel={closeDialog}
+      title="Create new challenge"
+      visible={visible}
+      onCancel={resetAddPostData}
       footer={[
-        <Button key="cancel" onClick={closeDialog}>
+        <Button key="cancel" onClick={resetAddPostData}>
           Cancel
         </Button>,
         <Button key="submit" type="primary" onClick={onSubmit}>
@@ -61,7 +62,7 @@ const AddPostModal = () => {
         </Button>,
       ]}
     >
-      <Form layout="vertical" onSubmit={onSubmit}>
+      <Form layout="vertical">
         <Form.Item label="Title" required>
           <Input
             type="text"
@@ -81,21 +82,25 @@ const AddPostModal = () => {
             onChange={onChangeNewPostForm}
           />
         </Form.Item>
-        <Form.Item label="Material URL">
-          <Input
-            type="text"
-            placeholder="Material URL"
-            name="url"
-            value={url}
-            onChange={onChangeNewPostForm}
-          />
-        </Form.Item>
-        <Form.Item label="Deadline Day">
+        <Form.Item label="Start Date">
           <DatePicker
             format="YYYY-MM-DD"
-            value={deadline ? moment(deadline) : null}
-            onChange={onChangeDate}
+            value={startDate ? moment(startDate) : null}
+            onChange={onChangeStartDate}
           />
+        </Form.Item>
+        <Form.Item label="End Date">
+          <DatePicker
+            format="YYYY-MM-DD"
+            value={endDate ? moment(endDate) : null}
+            onChange={onChangeEndDate}
+          />
+        </Form.Item>
+        <Form.Item label="Frequency">
+          <Select value={frequency} onChange={onChangeFrequency}>
+            <Select.Option value="daily">Daily</Select.Option>
+            <Select.Option value="weekly">Weekly</Select.Option>
+          </Select>
         </Form.Item>
       </Form>
     </Modal>
