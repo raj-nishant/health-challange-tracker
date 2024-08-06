@@ -1,18 +1,20 @@
-import { PostContext } from '../contexts/PostContext';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
-import SinglePost from '../components/posts/SinglePost';
-import AddPostModal from '../components/posts/AddPostModal';
-import UpdatePostModal from '../components/posts/UpdatePostModal';
-import addIcon from '../assets/plus-circle-fill.svg';
+import { PostContext } from "../contexts/PostContext";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import SinglePost from "../components/posts/SinglePost";
+import AddPostModal from "../components/posts/AddPostModal";
+import UpdatePostModal from "../components/posts/UpdatePostModal";
+import addIcon from "../assets/plus-circle-fill.svg";
 
 const Dashboard = () => {
   // Contexts
-  const {
-    authState: {
-      user: { username },
-    },
-  } = useContext(AuthContext);
+  // const {
+  //   authState: {
+  //     user: { username },
+  //   },
+  // } = useContext(AuthContext);
+
+  const user = localStorage.getItem("username");
 
   const {
     postState: { post, posts, sortBy },
@@ -28,8 +30,8 @@ const Dashboard = () => {
   const [donePosts, setDonePosts] = useState([]);
   const [deadlineNotiOpen, setDeadlineNotiOpen] = useState(true);
   const [earliestDeadline, setEarliestDeadline] = useState({
-    title: '',
-    deadline: '',
+    title: "",
+    deadline: "",
   });
 
   useEffect(() => {
@@ -37,11 +39,11 @@ const Dashboard = () => {
     setInProgressPosts([]);
     setDonePosts([]);
     posts.forEach((post) => {
-      if (post.status === 'TO DO') {
+      if (post.status === "TO DO") {
         setToDoPosts((prev) => [...prev, post]);
-      } else if (post.status === 'IN PROGRESS') {
+      } else if (post.status === "IN PROGRESS") {
         setInProgressPosts((prev) => [...prev, post]);
-      } else if (post.status === 'DONE') {
+      } else if (post.status === "DONE") {
         setDonePosts((prev) => [...prev, post]);
       }
     });
@@ -78,13 +80,19 @@ const Dashboard = () => {
   return (
     <div className="p-4">
       {posts.length > 0 && (
-        <div className={`max-w-xl mx-auto mb-4 p-6 bg-white shadow-md rounded ${deadlineNotiOpen ? '' : 'hidden'}`}>
-          <h1 className="text-2xl font-bold mb-2">Hi {username}</h1>
+        <div
+          className={`max-w-xl mx-auto mb-4 p-6 bg-white shadow-md rounded ${
+            deadlineNotiOpen ? "" : "hidden"
+          }`}
+        >
+          <h1 className="text-2xl font-bold mb-2">Hi {user}</h1>
           <div className="mb-4">
             <h2 className="text-xl font-semibold">Deadline Notification</h2>
             <p className="text-gray-700">
-              The deadline for task <span className="font-bold">{earliestDeadline.title}</span> is{' '}
-              <span className="font-bold">{earliestDeadline.deadline}</span>, which is the earliest deadline.
+              The deadline for task{" "}
+              <span className="font-bold">{earliestDeadline.title}</span> is{" "}
+              <span className="font-bold">{earliestDeadline.deadline}</span>,
+              which is the earliest deadline.
             </p>
           </div>
           <button
@@ -130,13 +138,13 @@ const Dashboard = () => {
       <AddPostModal />
       {post !== null && <UpdatePostModal />}
       <div
-        className={`fixed top-20 right-10 p-4 bg-${type === 'success' ? 'green' : 'red'}-500 text-white rounded shadow-md ${
-          show ? '' : 'hidden'
-        }`}
+        className={`fixed top-20 right-10 p-4 bg-${
+          type === "success" ? "green" : "red"
+        }-500 text-white rounded shadow-md ${show ? "" : "hidden"}`}
         onClose={() =>
           setShowToast({
             show: false,
-            message: '',
+            message: "",
             type: null,
           })
         }

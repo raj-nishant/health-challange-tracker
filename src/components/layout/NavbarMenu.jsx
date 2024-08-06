@@ -1,16 +1,18 @@
-import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
-import { PostContext } from '../../contexts/PostContext';
-import saveIcon from '../../assets/save.jpg';
-import { LOCAL_STORAGE_POST_NAME } from '../../contexts/constants';
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
+import { PostContext } from "../../contexts/PostContext";
+import saveIcon from "../../assets/save.jpg";
+import { LOCAL_STORAGE_POST_NAME } from "../../contexts/constants";
 
 const NavbarMenu = () => {
-  const {
-    authState: {
-      user: { username },
-    },
-  } = useContext(AuthContext);
+  // const {
+  //   authState: {
+  //     user: { username },
+  //   },
+  // } = useContext(AuthContext);
+
+  const user = localStorage.getItem("username");
 
   const {
     postState: { posts },
@@ -24,13 +26,17 @@ const NavbarMenu = () => {
   const save = () => {
     const postJsonString = JSON.stringify(posts);
     localStorage.setItem(LOCAL_STORAGE_POST_NAME, postJsonString);
-    setShowToast({ show: true, message: 'The posts have successfully saved!', type: 'success' });
+    setShowToast({
+      show: true,
+      message: "The posts have successfully saved!",
+      type: "success",
+    });
   };
 
   const sort = (option) => {
-    if (option === 'title') {
+    if (option === "title") {
       sortPostsByTitle();
-    } else if (option === 'deadline') {
+    } else if (option === "deadline") {
       sortPostsByDeadline();
     }
   };
@@ -43,7 +49,9 @@ const NavbarMenu = () => {
             <Link to="/dashboard" className="text-white font-semibold text-xl">
               Dashboard
             </Link>
-            <span className="ml-6 text-white font-semibold">Welcome {username}</span>
+            <span className="ml-6 text-white font-semibold">
+              Welcome {user}
+            </span>
           </div>
           <div className="flex items-center">
             <div className="relative inline-block text-left">
@@ -79,7 +87,7 @@ const NavbarMenu = () => {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                       role="menuitem"
                       onClick={() => {
-                        sort('title');
+                        sort("title");
                         setIsDropdownOpen(false);
                       }}
                     >
@@ -89,7 +97,7 @@ const NavbarMenu = () => {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                       role="menuitem"
                       onClick={() => {
-                        sort('deadline');
+                        sort("deadline");
                         setIsDropdownOpen(false);
                       }}
                     >

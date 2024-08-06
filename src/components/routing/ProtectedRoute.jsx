@@ -1,23 +1,20 @@
-import { Navigate, Outlet } from 'react-router-dom'
-import { useContext } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
-import NavbarMenu from '../layout/NavbarMenu'
+import { Navigate, Outlet } from "react-router-dom";
+import NavbarMenu from "../layout/NavbarMenu";
 
 const ProtectedRoute = () => {
-    const {
-        authState: { user }
-    } = useContext(AuthContext)
+  // Check if username exists in localStorage
+  const user = localStorage.getItem("username");
 
-    if (!user) {
-        return <Navigate to='/login' replace />
-    }
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-    return (
-        <>
-            <NavbarMenu />
-            <Outlet />
-        </>
-    )
-}
+  return (
+    <>
+      <NavbarMenu />
+      <Outlet />
+    </>
+  );
+};
 
-export default ProtectedRoute
+export default ProtectedRoute;
