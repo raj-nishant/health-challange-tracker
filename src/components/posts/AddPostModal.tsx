@@ -1,10 +1,30 @@
 import React, { useState } from "react";
 import { Modal, Button, Form, Input, DatePicker, Select } from "antd";
 import { v4 as uuidv4 } from "uuid";
-import moment from "moment";
+import moment, { Moment } from "moment";
 
-const AddPostModal = ({ visible, onClose, onAddPost }) => {
-  const [newPost, setNewPost] = useState({
+interface AddPostModalProps {
+  visible: boolean;
+  onClose: () => void;
+  onAddPost: (post: NewPost) => void;
+}
+
+interface NewPost {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  startDate: string;
+  frequency: string;
+  url: string;
+}
+
+const AddPostModal: React.FC<AddPostModalProps> = ({
+  visible,
+  onClose,
+  onAddPost,
+}) => {
+  const [newPost, setNewPost] = useState<NewPost>({
     id: uuidv4(),
     title: "",
     description: "",
@@ -16,19 +36,21 @@ const AddPostModal = ({ visible, onClose, onAddPost }) => {
 
   const { title, description, startDate, duration, frequency, url } = newPost;
 
-  const onChangeNewPostForm = (event) => {
+  const onChangeNewPostForm = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setNewPost({ ...newPost, [event.target.name]: event.target.value });
   };
 
-  const onChangeStartDate = (date, dateString) => {
+  const onChangeStartDate = (date: Moment | null, dateString: string) => {
     setNewPost({ ...newPost, startDate: dateString });
   };
 
-  const onChangeDuration = (value) => {
+  const onChangeDuration = (value: string) => {
     setNewPost({ ...newPost, duration: value });
   };
 
-  const onChangeFrequency = (value) => {
+  const onChangeFrequency = (value: string) => {
     setNewPost({ ...newPost, frequency: value });
   };
 
@@ -94,12 +116,12 @@ const AddPostModal = ({ visible, onClose, onAddPost }) => {
         <Form.Item label="Duration">
           <Select value={duration} onChange={onChangeDuration}>
             <Select.Option value="1">1 week</Select.Option>
-            <Select.Option value="2">2 week</Select.Option>
-            <Select.Option value="3">3 week</Select.Option>
-            <Select.Option value="4">4 week</Select.Option>
-            <Select.Option value="5">5 week</Select.Option>
-            <Select.Option value="6">6 week</Select.Option>
-            <Select.Option value="7">7 week</Select.Option>
+            <Select.Option value="2">2 weeks</Select.Option>
+            <Select.Option value="3">3 weeks</Select.Option>
+            <Select.Option value="4">4 weeks</Select.Option>
+            <Select.Option value="5">5 weeks</Select.Option>
+            <Select.Option value="6">6 weeks</Select.Option>
+            <Select.Option value="7">7 weeks</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item label="Frequency">

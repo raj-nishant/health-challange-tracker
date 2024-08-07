@@ -12,11 +12,12 @@ interface Post {
   description: string;
   url: string;
   deadline: string;
+  duration: string; // duration in weeks
+  frequency: string; // frequency type (daily, weekly, etc.)
+  progress: number; // progress count
 }
 
 const Dashboard: React.FC = () => {
-  const user = localStorage.getItem("username") || "User";
-
   const [posts, setPosts] = useState<Post[]>([]);
   const [toDoPosts, setToDoPosts] = useState<Post[]>([]);
   const [inProgressPosts, setInProgressPosts] = useState<Post[]>([]);
@@ -25,8 +26,6 @@ const Dashboard: React.FC = () => {
   const [showUpdatePostModal, setShowUpdatePostModal] =
     useState<boolean>(false);
   const [currentPost, setCurrentPost] = useState<Post | null>(null);
-  const [deadlineNotiOpen, setDeadlineNotiOpen] = useState<boolean>(true);
-  const [earliestDeadline, setEarliestDeadline] = useState<Post | null>(null);
 
   // Fetch posts from local storage
   useEffect(() => {
@@ -39,6 +38,9 @@ const Dashboard: React.FC = () => {
         description: post.description,
         url: post.url,
         deadline: post.endDate || post.deadline,
+        duration: post.duration,
+        frequency: post.frequency,
+        progress: post.progress || 0,
       }));
       setPosts(transformedPosts);
     }
@@ -52,28 +54,6 @@ const Dashboard: React.FC = () => {
       setDonePosts(posts.filter((post) => post.status === "DONE"));
     }
   }, [posts]);
-
-  // Calculate the earliest deadline
-  const getEarliestDeadline = useCallback(() => {
-    if (posts.length === 0) {
-      setEarliestDeadline(null);
-      return;
-    }
-    let earliestDeadlineTask = posts[0];
-    let earliestDeadline = new Date(posts[0].deadline);
-    for (let i = 1; i < posts.length; i++) {
-      const deadline = new Date(posts[i].deadline);
-      if (deadline < earliestDeadline) {
-        earliestDeadline = deadline;
-        earliestDeadlineTask = posts[i];
-      }
-    }
-    setEarliestDeadline(earliestDeadlineTask);
-  }, [posts]);
-
-  useEffect(() => {
-    getEarliestDeadline();
-  }, [getEarliestDeadline]);
 
   // Handle adding a new post
   const handleAddPost = (newPost: Post) => {
@@ -116,32 +96,26 @@ const Dashboard: React.FC = () => {
     setShowUpdatePostModal(true);
   };
 
+  // Handle progress update
+  const handleProgressUpdate = (
+    postId: string,
+    newProgress: number,
+    newStatus: string
+  ) => {
+    const updatedPosts = posts.map((post) =>
+      post.id === postId
+        ? { ...post, progress: newProgress, status: newStatus }
+        : post
+    );
+    setPosts(updatedPosts);
+    localStorage.setItem("posts", JSON.stringify(updatedPosts));
+  };
+
   return (
-    <div className="p-4">
-      {posts.length > 0 && earliestDeadline && (
-        <div
-          className={`max-w-xl mx-auto mb-4 p-6 bg-white shadow-md rounded ${
-            deadlineNotiOpen ? "" : "hidden"
-          }`}
-        >
-          <h1 className="text-2xl font-bold mb-2">Hi {user}</h1>
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold">Deadline Notification</h2>
-            <p className="text-gray-700">
-              The deadline for task{" "}
-              <span className="font-bold">{earliestDeadline.title}</span> is{" "}
-              <span className="font-bold">{earliestDeadline.deadline}</span>,
-              which is the earliest deadline.
-            </p>
-          </div>
-          <Button type="primary" onClick={() => setDeadlineNotiOpen(false)}>
-            Close
-          </Button>
-        </div>
-      )}
+    <div className="p-4 text-[#5a5a5a] bg-[#ffeade] min-h-screen pt-7">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <h3 className="text-center text-xl font-bold mb-4">TO DO</h3>
+          <h3 className="text-center text-xl font-bold mb-4">Active</h3>
           <div className="space-y-4">
             {toDoPosts.map((post) => (
               <SinglePost
@@ -149,12 +123,13 @@ const Dashboard: React.FC = () => {
                 post={post}
                 onEdit={() => handleEditPost(post)}
                 onDelete={() => handleDeletePost(post.id)}
+                onProgressUpdate={handleProgressUpdate}
               />
             ))}
           </div>
         </div>
         <div>
-          <h3 className="text-center text-xl font-bold mb-4">IN PROGRESS</h3>
+          <h3 className="text-center text-xl font-bold mb-4">Missed</h3>
           <div className="space-y-4">
             {inProgressPosts.map((post) => (
               <SinglePost
@@ -162,12 +137,13 @@ const Dashboard: React.FC = () => {
                 post={post}
                 onEdit={() => handleEditPost(post)}
                 onDelete={() => handleDeletePost(post.id)}
+                onProgressUpdate={handleProgressUpdate}
               />
             ))}
           </div>
         </div>
         <div>
-          <h3 className="text-center text-xl font-bold mb-4">DONE</h3>
+          <h3 className="text-center text-xl font-bold mb-4">Completed</h3>
           <div className="space-y-4">
             {donePosts.map((post) => (
               <SinglePost
@@ -175,6 +151,7 @@ const Dashboard: React.FC = () => {
                 post={post}
                 onEdit={() => handleEditPost(post)}
                 onDelete={() => handleDeletePost(post.id)}
+                onProgressUpdate={handleProgressUpdate}
               />
             ))}
           </div>
@@ -186,7 +163,7 @@ const Dashboard: React.FC = () => {
         className="fixed bottom-4 right-4 rounded-full"
         onClick={() => setShowAddPostModal(true)}
       >
-        Add Post
+        Add Challenge
       </Button>
       <AddPostModal
         visible={showAddPostModal}

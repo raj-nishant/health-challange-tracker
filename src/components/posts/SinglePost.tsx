@@ -1,18 +1,33 @@
 import React from "react";
-import { Card, Button, Badge } from "antd";
+import { Card, Button, Badge, Radio } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
   PlayCircleOutlined,
 } from "@ant-design/icons";
 
-const SinglePost = ({ post, onEdit, onDelete }) => {
+const SinglePost = ({ post, onEdit, onDelete, onProgressUpdate }) => {
   const statusColor =
     post.status === "DONE"
       ? "green"
       : post.status === "IN PROGRESS"
       ? "yellow"
       : "red";
+
+  const totalProgress =
+    post.frequency === "daily"
+      ? parseInt(post.duration) * 7
+      : parseInt(post.duration);
+
+  const handleProgressClick = () => {
+    const newProgress = post.progress + 1;
+    if (newProgress >= totalProgress) {
+      onProgressUpdate(post.id, newProgress, "DONE");
+    } else {
+      onProgressUpdate(post.id, newProgress, post.status);
+    }
+  };
+
   return (
     <Card
       className="shadow-lg border mb-4"
@@ -44,7 +59,26 @@ const SinglePost = ({ post, onEdit, onDelete }) => {
           View Tutorial
         </Button>
       )}
-      <p className="mt-2 text-gray-600">Deadline: {post.deadline}</p>
+      <Radio.Group className="mt-2">
+        <Radio.Button onClick={handleProgressClick}>
+          Done {post.progress}/{totalProgress}
+        </Radio.Button>
+        <Radio.Button
+          onClick={() =>
+            onProgressUpdate(post.id, post.progress, "IN PROGRESS")
+          }
+        >
+          Missed Task
+        </Radio.Button>
+        <Radio.Button
+          onClick={() => onProgressUpdate(post.id, post.progress, "DONE")}
+        >
+          Mark as Completed
+        </Radio.Button>
+      </Radio.Group>
+      <div className="mt-2">
+        Progress: {((post.progress / totalProgress) * 100).toFixed(2)}%
+      </div>
     </Card>
   );
 };
