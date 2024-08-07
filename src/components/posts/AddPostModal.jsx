@@ -8,13 +8,13 @@ const AddPostModal = ({ visible, onClose, onAddPost }) => {
     id: uuidv4(),
     title: "",
     description: "",
+    duration: "",
     startDate: "",
-    endDate: "",
     frequency: "daily",
     url: "", // Added URL field
   });
 
-  const { title, description, startDate, endDate, frequency, url } = newPost;
+  const { title, description, startDate, duration, frequency, url } = newPost;
 
   const onChangeNewPostForm = (event) => {
     setNewPost({ ...newPost, [event.target.name]: event.target.value });
@@ -24,8 +24,8 @@ const AddPostModal = ({ visible, onClose, onAddPost }) => {
     setNewPost({ ...newPost, startDate: dateString });
   };
 
-  const onChangeEndDate = (date, dateString) => {
-    setNewPost({ ...newPost, endDate: dateString });
+  const onChangeDuration = (value) => {
+    setNewPost({ ...newPost, duration: value });
   };
 
   const onChangeFrequency = (value) => {
@@ -42,8 +42,8 @@ const AddPostModal = ({ visible, onClose, onAddPost }) => {
       id: uuidv4(),
       title: "",
       description: "",
+      duration: "",
       startDate: "",
-      endDate: "",
       frequency: "daily",
       url: "", // Reset URL field
     });
@@ -87,16 +87,20 @@ const AddPostModal = ({ visible, onClose, onAddPost }) => {
         <Form.Item label="Start Date">
           <DatePicker
             format="YYYY-MM-DD"
-            value={startDate ? moment(startDate) : null}
+            value={startDate ? moment(startDate, "YYYY-MM-DD") : null}
             onChange={onChangeStartDate}
           />
         </Form.Item>
-        <Form.Item label="End Date">
-          <DatePicker
-            format="YYYY-MM-DD"
-            value={endDate ? moment(endDate) : null}
-            onChange={onChangeEndDate}
-          />
+        <Form.Item label="Duration">
+          <Select value={duration} onChange={onChangeDuration}>
+            <Select.Option value="1">1 week</Select.Option>
+            <Select.Option value="2">2 week</Select.Option>
+            <Select.Option value="3">3 week</Select.Option>
+            <Select.Option value="4">4 week</Select.Option>
+            <Select.Option value="5">5 week</Select.Option>
+            <Select.Option value="6">6 week</Select.Option>
+            <Select.Option value="7">7 week</Select.Option>
+          </Select>
         </Form.Item>
         <Form.Item label="Frequency">
           <Select value={frequency} onChange={onChangeFrequency}>
