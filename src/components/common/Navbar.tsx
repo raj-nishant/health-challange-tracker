@@ -1,67 +1,12 @@
 import React, { useState } from "react";
-// import arm from "../../assets/arm.png";
-import navbar from "../../assets/navbar.png";
-import style from "./Navbar.module.css";
 import logo from "../../assets/logo.png";
-import { Link, useLocation } from "react-router-dom";
 
 const NavBar: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
-
-  const matchRoute = (route: string): boolean => {
-    return route === location.pathname;
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
-
   return (
-    <div className={style.container}>
-      <h3 className={style.heading}>
-        <img src={logo} alt="" />
-      </h3>
-      {/* <div
-        className={`${style.navlink} ${
-          isMobileMenuOpen ? style.mobileMenuOpen : ""
-        }`}
-      >
-        <Link
-          to="/"
-          style={matchRoute("/") ? { color: "rgb(239, 113, 55)" } : undefined}
-          onClick={closeMobileMenu}
-        >
-          <span>Home</span>
-        </Link>
-        <Link
-          to="/challenges"
-          style={
-            matchRoute("/challenges")
-              ? { color: "rgb(239, 113, 55)" }
-              : undefined
-          }
-          onClick={closeMobileMenu}
-        >
-          <span>Challenges</span>
-        </Link>
-        <Link
-          to="/workouts"
-          style={
-            matchRoute("/workouts") ? { color: "rgb(239, 113, 55)" } : undefined
-          }
-          onClick={closeMobileMenu}
-        >
-          <span>Workouts</span>
-        </Link>
-      </div> */}
-      <button className={style.hamburger} onClick={toggleMobileMenu}>
-        <img src={navbar} alt="Open Menu" className={style.navbarImage} />
-      </button>
+    <div className="fixed top-0 left-0 z-10 flex items-center justify-between w-full h-20 px-4 py-2 border-b border-[#fefedc] ">
+      <div className="flex items-center justify-baseline gap-2 cursor-pointer text-gray-800">
+        <img src={logo} alt="" className="w-20 md:w-24" />
+      </div>
     </div>
   );
 };
