@@ -1,12 +1,41 @@
 import React from "react";
-import { Card, Button, Badge, Radio } from "antd";
+import { Card, Button, Badge, Radio, Tooltip } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
   PlayCircleOutlined,
 } from "@ant-design/icons";
+import moment from "moment";
 
-const SinglePost = ({ post, onEdit, onDelete, onProgressUpdate }) => {
+interface Post {
+  id: string;
+  status: string;
+  title: string;
+  description: string;
+  url: string;
+  startDate: string;
+  duration: string;
+  frequency: string;
+  progress: number;
+}
+
+interface SinglePostProps {
+  post: Post;
+  onEdit: () => void;
+  onDelete: () => void;
+  onProgressUpdate: (
+    postId: string,
+    newProgress: number,
+    newStatus: string
+  ) => void;
+}
+
+const SinglePost: React.FC<SinglePostProps> = ({
+  post,
+  onEdit,
+  onDelete,
+  onProgressUpdate,
+}) => {
   const statusColor =
     post.status === "DONE"
       ? "green"
@@ -40,26 +69,44 @@ const SinglePost = ({ post, onEdit, onDelete, onProgressUpdate }) => {
       }
       extra={
         <div className="flex space-x-2">
-          <Button type="text" icon={<EditOutlined />} onClick={onEdit} />
-          <Button type="text" icon={<DeleteOutlined />} onClick={onDelete} />
+          <Tooltip title="Edit">
+            <Button type="text" icon={<EditOutlined />} onClick={onEdit} />
+          </Tooltip>
+          <Tooltip title="Delete">
+            <Button type="text" icon={<DeleteOutlined />} onClick={onDelete} />
+          </Tooltip>
         </div>
       }
     >
-      <h4 className="font-semibold text-xl">{post.title}</h4>
-      <p className="text-gray-700 mb-2">{post.description}</p>
-      {post.url && (
-        <Button
-          type="link"
-          href={post.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          icon={<PlayCircleOutlined />}
-          className="text-blue-500"
-        >
-          View Tutorial
-        </Button>
-      )}
-      <Radio.Group className="mt-2">
+      <div className="mb-4">
+        <h4 className="font-semibold text-xl">{post.title}</h4>
+        <p className="text-gray-700 mb-2">{post.description}</p>
+        <p className="text-gray-500">
+          <strong>Start Date:</strong>{" "}
+          {moment(post.startDate).format("YYYY-MM-DD")}
+        </p>
+        <p className="text-gray-500">
+          <strong>Duration:</strong> {post.duration}{" "}
+          {post.duration > 1 ? "weeks" : "week"}
+        </p>
+        <p className="text-gray-500">
+          <strong>Frequency:</strong>{" "}
+          {post.frequency.charAt(0).toUpperCase() + post.frequency.slice(1)}
+        </p>
+        {post.url && (
+          <Button
+            type="link"
+            href={post.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            icon={<PlayCircleOutlined />}
+            className="text-blue-500"
+          >
+            View Tutorial
+          </Button>
+        )}
+      </div>
+      <Radio.Group className="mt-2 flex space-x-2">
         <Radio.Button onClick={handleProgressClick}>
           Done {post.progress}/{totalProgress}
         </Radio.Button>
@@ -77,7 +124,8 @@ const SinglePost = ({ post, onEdit, onDelete, onProgressUpdate }) => {
         </Radio.Button>
       </Radio.Group>
       <div className="mt-2">
-        Progress: {((post.progress / totalProgress) * 100).toFixed(2)}%
+        <strong>Progress:</strong>{" "}
+        {((post.progress / totalProgress) * 100).toFixed(2)}%
       </div>
     </Card>
   );

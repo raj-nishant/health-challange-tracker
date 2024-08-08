@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import SinglePost from "../components/posts/SinglePost";
 import AddPostModal from "../components/posts/AddPostModal";
 import UpdatePostModal from "../components/posts/UpdatePostModal";
@@ -31,13 +31,13 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const savedPosts = JSON.parse(localStorage.getItem("posts") || "[]");
     if (Array.isArray(savedPosts)) {
-      const transformedPosts = savedPosts.map((post: any) => ({
+      const transformedPosts = savedPosts.map((post) => ({
         id: post.id,
         status: post.status || "TO DO",
         title: post.title,
         description: post.description,
         url: post.url,
-        startDate: post.startDate,
+        startDate: post.startDate || post.deadline,
         duration: post.duration,
         frequency: post.frequency,
         progress: post.progress || 0,
@@ -48,11 +48,9 @@ const Dashboard: React.FC = () => {
 
   // Filter posts by status
   useEffect(() => {
-    if (posts.length > 0) {
-      setToDoPosts(posts.filter((post) => post.status === "TO DO"));
-      setInProgressPosts(posts.filter((post) => post.status === "IN PROGRESS"));
-      setDonePosts(posts.filter((post) => post.status === "DONE"));
-    }
+    setToDoPosts(posts.filter((post) => post.status === "TO DO"));
+    setInProgressPosts(posts.filter((post) => post.status === "IN PROGRESS"));
+    setDonePosts(posts.filter((post) => post.status === "DONE"));
   }, [posts]);
 
   // Handle adding a new post
