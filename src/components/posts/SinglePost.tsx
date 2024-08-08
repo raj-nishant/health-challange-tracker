@@ -7,35 +7,7 @@ import {
 } from "@ant-design/icons";
 import moment from "moment";
 
-interface Post {
-  id: string;
-  status: string;
-  title: string;
-  description: string;
-  url: string;
-  startDate: string;
-  duration: string;
-  frequency: string;
-  progress: number;
-}
-
-interface SinglePostProps {
-  post: Post;
-  onEdit: () => void;
-  onDelete: () => void;
-  onProgressUpdate: (
-    postId: string,
-    newProgress: number,
-    newStatus: string
-  ) => void;
-}
-
-const SinglePost: React.FC<SinglePostProps> = ({
-  post,
-  onEdit,
-  onDelete,
-  onProgressUpdate,
-}) => {
+const SinglePost = ({ post, onEdit, onDelete, onProgressUpdate }) => {
   const statusColor =
     post.status === "DONE"
       ? "green"
