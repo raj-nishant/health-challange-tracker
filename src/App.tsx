@@ -1,16 +1,13 @@
-// import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Landing from "./components/layout/Landing.js";
 import Auth from "./views/Auth.tsx";
 
 import Dashboard from "./views/Dashboard.tsx";
-import ProtectedRoute from "./components/routing/ProtectedRoute.jsx";
-// import PostContextProvider from "./contexts/PostContext.jsx";
+import ProtectedRoute from "./components/routing/ProtectedRoute.tsx";
 import NavBar from "./components/common/Navbar.tsx";
 
 function App() {
   return (
-    // <PostContextProvider>
     <Router>
       <NavBar />
       <Routes>
@@ -21,7 +18,6 @@ function App() {
         </Route>
       </Routes>
     </Router>
-    // </PostContextProvider>
   );
 }
 

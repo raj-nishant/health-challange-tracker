@@ -1,7 +1,8 @@
+import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import NavbarMenu from "../layout/NavbarMenu";
 
-const ProtectedRoute = () => {
+const ProtectedRoute: React.FC = () => {
   const user = localStorage.getItem("username");
 
   if (!user) {
