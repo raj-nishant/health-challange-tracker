@@ -11,7 +11,7 @@ interface Post {
   title: string;
   description: string;
   url: string;
-  deadline: string;
+  startDate: string;
   duration: string;
   frequency: string;
   progress: number;
@@ -31,13 +31,13 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const savedPosts = JSON.parse(localStorage.getItem("posts") || "[]");
     if (Array.isArray(savedPosts)) {
-      const transformedPosts = savedPosts.map((post) => ({
+      const transformedPosts = savedPosts.map((post: any) => ({
         id: post.id,
         status: post.status || "TO DO",
         title: post.title,
         description: post.description,
         url: post.url,
-        deadline: post.endDate || post.deadline,
+        startDate: post.startDate,
         duration: post.duration,
         frequency: post.frequency,
         progress: post.progress || 0,

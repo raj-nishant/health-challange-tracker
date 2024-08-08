@@ -9,7 +9,7 @@ interface Post {
   title: string;
   description: string;
   url: string;
-  deadline: string;
+  startDate: string;
   duration: string;
   frequency: string;
   progress: number;
@@ -32,13 +32,13 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
     title: "",
     description: "",
     url: "",
-    deadline: "",
+    startDate: "",
     duration: "",
     frequency: "daily",
     progress: 0,
   });
 
-  const { title, description, deadline, duration, frequency, url } = newPost;
+  const { title, description, startDate, duration, frequency, url } = newPost;
 
   const onChangeNewPostForm = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -46,8 +46,8 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
     setNewPost({ ...newPost, [event.target.name]: event.target.value });
   };
 
-  const onChangeDeadline = (date: Moment | null, dateString: string) => {
-    setNewPost({ ...newPost, deadline: dateString });
+  const onChangeStartDate = (date: Moment | null, dateString: string) => {
+    setNewPost({ ...newPost, startDate: dateString });
   };
 
   const onChangeDuration = (value: string) => {
@@ -70,7 +70,7 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
       title: "",
       description: "",
       url: "",
-      deadline: "",
+      startDate: "",
       duration: "",
       frequency: "daily",
       progress: 0,
@@ -112,11 +112,11 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
             onChange={onChangeNewPostForm}
           />
         </Form.Item>
-        <Form.Item label="Deadline">
+        <Form.Item label="Start Date">
           <DatePicker
             format="YYYY-MM-DD"
-            value={deadline ? moment(deadline, "YYYY-MM-DD") : null}
-            onChange={onChangeDeadline}
+            value={startDate ? moment(startDate, "YYYY-MM-DD") : null}
+            onChange={onChangeStartDate}
           />
         </Form.Item>
         <Form.Item label="Duration">
