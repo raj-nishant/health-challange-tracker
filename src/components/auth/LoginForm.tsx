@@ -27,10 +27,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-center items-center mt-8">
-      <Form
-        className="flex flex-col items-center gap-4 w-11/12 md:w-1/2"
-        onFinish={login}
-      >
+      <Form className="flex flex-col items-center gap-4" onFinish={login}>
         {isCreatingChallenge ? (
           <>
             <Form.Item
@@ -45,12 +42,12 @@ const LoginForm: React.FC = () => {
                 name="username"
                 value={username}
                 onChange={onChangeLoginForm}
-                className="w-full md:w-3/4 px-3 py-2 border border-gray-300 rounded-md"
+                className="w-72 h-10 px-3 py-2 border border-gray-300 rounded-md"
               />
             </Form.Item>
             <Form.Item>
               <Button
-                className="w-full md:w-3/4 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-md"
+                className="w-44 h-12 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-md shadow-lg"
                 type="primary"
                 htmlType="submit"
               >
@@ -60,7 +57,7 @@ const LoginForm: React.FC = () => {
           </>
         ) : (
           <Button
-            className=" md:w-1/3 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-md"
+            className="w-44 h-12 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-md shadow-lg"
             type="primary"
             onClick={startChallenge}
           >

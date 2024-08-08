@@ -11,7 +11,7 @@ const Auth: React.FC = () => {
 
   return (
     <div className="flex flex-col bg-orange-100 min-h-screen">
-      <section className="flex flex-col md:flex-row justify-between w-11/12 mx-auto mt-12">
+      <section className="flex flex-col md:flex-row justify-between w-3/4 mx-auto mt-12">
         <img
           src={start}
           className="w-[250px] md:w-[350px] h-[280px] md:h-[380px] animate-fadeInSlideUp"
@@ -33,7 +33,7 @@ const Auth: React.FC = () => {
         <p className="text-2xl md:text-4xl font-semibold text-gray-700 font-poppins text-center">
           Features of our application
         </p>
-        <div className="flex flex-col md:flex-row gap-5 w-full md:w-auto justify-center">
+        <div className="flex flex-wrap gap-5 justify-center w-full md:w-auto">
           {[
             {
               id: 1,
