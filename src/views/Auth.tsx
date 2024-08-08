@@ -11,17 +11,17 @@ const Auth: React.FC = () => {
 
   return (
     <div className="flex flex-col bg-orange-100 min-h-screen">
-      <section className="flex justify-between w-3/4 mx-auto mt-12">
+      <section className="flex flex-col md:flex-row justify-between w-11/12 mx-auto mt-12">
         <img
           src={start}
-          className="w-[350px] h-[380px] animate-fadeInSlideUp"
+          className="w-[250px] md:w-[350px] h-[280px] md:h-[380px] animate-fadeInSlideUp"
           alt="Start"
         />
-        <div className="flex flex-col justify-center w-3/5 gap-5">
-          <h3 className="text-5xl font-medium text-gray-700 font-poppins animate-fadeInSlideUp">
+        <div className="flex flex-col justify-center w-full md:w-3/5 gap-5 mt-6 md:mt-0">
+          <h3 className="text-3xl md:text-5xl font-medium text-gray-700 font-poppins animate-fadeInSlideUp">
             Health Tracking
           </h3>
-          <p className="text-2xl font-light text-gray-600 font-poppins animate-fadeInSlideUp delay-500">
+          <p className="text-xl md:text-2xl font-light text-gray-600 font-poppins animate-fadeInSlideUp delay-500">
             Your Fitness Journey Starts Here
           </p>
         </div>
@@ -30,10 +30,10 @@ const Auth: React.FC = () => {
       <LoginForm />
 
       <section className="flex flex-col items-center gap-12 p-8">
-        <p className="text-4xl font-semibold text-gray-700 font-poppins text-center">
+        <p className="text-2xl md:text-4xl font-semibold text-gray-700 font-poppins text-center">
           Features of our application
         </p>
-        <div className="flex gap-5">
+        <div className="flex flex-col md:flex-row gap-5 w-full md:w-auto justify-center">
           {[
             {
               id: 1,

@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-import style from "./LoginForm.module.css";
 
 interface LoginFormProps {
   username: string;
@@ -27,8 +26,11 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className={style.container}>
-      <Form className={style.form} onFinish={login}>
+    <div className="flex flex-col justify-center items-center mt-8">
+      <Form
+        className="flex flex-col items-center gap-4 w-11/12 md:w-1/2"
+        onFinish={login}
+      >
         {isCreatingChallenge ? (
           <>
             <Form.Item
@@ -43,12 +45,12 @@ const LoginForm: React.FC = () => {
                 name="username"
                 value={username}
                 onChange={onChangeLoginForm}
-                className={style.input}
+                className="w-full md:w-3/4 px-3 py-2 border border-gray-300 rounded-md"
               />
             </Form.Item>
             <Form.Item>
               <Button
-                className={style.challangebtn}
+                className="w-full md:w-3/4 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-md"
                 type="primary"
                 htmlType="submit"
               >
@@ -58,7 +60,7 @@ const LoginForm: React.FC = () => {
           </>
         ) : (
           <Button
-            className={style.challangebtn}
+            className=" md:w-1/3 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-md"
             type="primary"
             onClick={startChallenge}
           >
