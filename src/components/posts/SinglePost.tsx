@@ -6,19 +6,7 @@ import {
   PlayCircleOutlined,
 } from "@ant-design/icons";
 
-interface SinglePostProps {
-  post: any;
-  onEdit: (post: any) => void;
-  onDelete: (post: any) => void;
-  onProgressUpdate: (progress: number) => void;
-}
-
-const SinglePost: React.FC<SinglePostProps> = ({
-  post,
-  onEdit,
-  onDelete,
-  onProgressUpdate,
-}) => {
+const SinglePost = ({ post, onEdit, onDelete, onProgressUpdate }) => {
   const statusColor =
     post.status === "DONE"
       ? "green"

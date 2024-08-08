@@ -3,20 +3,22 @@ import { Modal, Button, Form, Input, DatePicker, Select } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import moment, { Moment } from "moment";
 
+interface Post {
+  id: string;
+  status: string;
+  title: string;
+  description: string;
+  url: string;
+  deadline: string;
+  duration: string;
+  frequency: string;
+  progress: number;
+}
+
 interface AddPostModalProps {
   visible: boolean;
   onClose: () => void;
-  onAddPost: (post: NewPost) => void;
-}
-
-interface NewPost {
-  id: string;
-  title: string;
-  description: string;
-  duration: string;
-  startDate: string;
-  frequency: string;
-  url: string;
+  onAddPost: (post: Post) => void;
 }
 
 const AddPostModal: React.FC<AddPostModalProps> = ({
@@ -24,17 +26,19 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
   onClose,
   onAddPost,
 }) => {
-  const [newPost, setNewPost] = useState<NewPost>({
+  const [newPost, setNewPost] = useState<Post>({
     id: uuidv4(),
+    status: "TO DO",
     title: "",
     description: "",
+    url: "",
+    deadline: "",
     duration: "",
-    startDate: "",
     frequency: "daily",
-    url: "", // Added URL field
+    progress: 0,
   });
 
-  const { title, description, startDate, duration, frequency, url } = newPost;
+  const { title, description, deadline, duration, frequency, url } = newPost;
 
   const onChangeNewPostForm = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -42,8 +46,8 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
     setNewPost({ ...newPost, [event.target.name]: event.target.value });
   };
 
-  const onChangeStartDate = (date: Moment | null, dateString: string) => {
-    setNewPost({ ...newPost, startDate: dateString });
+  const onChangeDeadline = (date: Moment | null, dateString: string) => {
+    setNewPost({ ...newPost, deadline: dateString });
   };
 
   const onChangeDuration = (value: string) => {
@@ -62,12 +66,14 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
   const resetAddPostData = () => {
     setNewPost({
       id: uuidv4(),
+      status: "TO DO",
       title: "",
       description: "",
+      url: "",
+      deadline: "",
       duration: "",
-      startDate: "",
       frequency: "daily",
-      url: "", // Reset URL field
+      progress: 0,
     });
     onClose();
   };
@@ -106,11 +112,11 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
             onChange={onChangeNewPostForm}
           />
         </Form.Item>
-        <Form.Item label="Start Date">
+        <Form.Item label="Deadline">
           <DatePicker
             format="YYYY-MM-DD"
-            value={startDate ? moment(startDate, "YYYY-MM-DD") : null}
-            onChange={onChangeStartDate}
+            value={deadline ? moment(deadline, "YYYY-MM-DD") : null}
+            onChange={onChangeDeadline}
           />
         </Form.Item>
         <Form.Item label="Duration">

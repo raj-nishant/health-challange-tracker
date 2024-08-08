@@ -12,9 +12,9 @@ interface Post {
   description: string;
   url: string;
   deadline: string;
-  duration: string; // duration in weeks
-  frequency: string; // frequency type (daily, weekly, etc.)
-  progress: number; // progress count
+  duration: string;
+  frequency: string;
+  progress: number;
 }
 
 const Dashboard: React.FC = () => {
